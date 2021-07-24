@@ -1,1 +1,54 @@
-Hello!
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <title>CS 416 Data Visualization - Narrative Visualization Project</title>
+    <meta name="author" content="Dimitar Pendurkov">
+    <meta name="description" content="">
+
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        body {
+          display: grid;
+          place-items: center;
+          padding: 5% 10% 0% 10%;
+        }
+      </style>
+
+</head>
+
+<body>
+    <svg width="300" height="300" style="border: solid; background-color:bisque"></svg>
+    <script>
+        async function main() {
+            const data = await d3.csv("/data/StudentsPerformance.csv");
+            console.log(data);
+
+            var x = d3.scaleLog().base(10).domain([10,150]).range([0,200]);
+            var y = d3.scaleLog().base(10).domain([10,150]).range([200,0]);
+            
+            d3.select('svg')
+            .attr("width", 300+ 2*50)
+            .attr("height", 300+ 2*50)
+            .append('g')
+            .attr("transform", "translate("+50+","+50+")")
+            .selectAll().data(data).enter().append('circle')
+            .attr("cx",function(d){return x(parseInt(d["math score"]));})
+            .attr("cy",function(d){return y((parseInt(d["reading score"]) + parseInt(d["writing score"]))/2);})
+            .attr("r", 5);
+
+            d3.select("svg").append("g")
+            .attr("transform", "translate("+50+","+50+")")
+            .call(d3.axisLeft(y).tickValues([10,20,50,100])
+            .tickFormat(d3.format("~s")));
+
+            d3.select("svg").append("g")
+
+            .attr("transform", "translate("+50+","+(50+200)+")")
+
+            .call(d3.axisBottom(x).tickValues([10,20,50,100])
+            .tickFormat(d3.format("~s")));
+        }
+        main();
+    </script>
+</body>
