@@ -31,7 +31,7 @@
     <div id="tooltip"></div>
     <script>
         async function main() {
-            const data = await d3.csv("https://raw.githubusercontent.com/tpjwm/tpjwm.github.io/master/data/StudentsPerformance.csv");
+            const data = await d3.csv("https://raw.githubusercontent.com/tpjwm/tpjwm.github.io/master/data/scores.csv");
             
             var width = 800;
             var height = 500;
@@ -48,14 +48,14 @@
             .append('g')
             .attr("transform", "translate("+margin+","+margin+")")
             .selectAll().data(data).enter().append('circle')
-            .attr("cx",function(d){return x(parseInt(d["math score"]));})
-            .attr("cy",function(d){return y((parseInt(d["reading score"]) + parseInt(d["writing score"]))/2);})
+            .attr("cx",function(d){return x(parseInt(d["Average Score (SAT Math)"]));})
+            .attr("cy",function(d){return y(parseInt(d["Average Score (SAT Reading)"]));})
             .attr("r", 5)
             .on("mouseover", function(d,i){
                 tooltip.style("opacity", 1)
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY) + "py")
-                    .html("Scores are: math: " + d["math score"] + " reading/writing: " + (parseInt(d["reading score"]) + parseInt(d["writing score"]))/2);
+                    .html("Average scores are: math: " + d["Average Score (SAT Math)"] + " reading: " + (parseInt(d["Average Score (SAT Reading)"])));
             })
             .on("mouseout", function(){
                 tooltip.style("opacity", 0)
