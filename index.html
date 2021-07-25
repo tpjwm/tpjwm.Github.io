@@ -13,14 +13,14 @@
           display: grid;
           place-items: center;
           padding: 5% 10% 0% 10%;
-          background: skyblue;
+          background: rgb(235, 246, 250);
         }
         #tooltip {
             opacity: 0;
             position: absolute;
             text-align: center;
-            width: 150px; height: 150px;
-            background: white;
+            width: 250px; height: 150px;
+            background: rgb(197, 206, 243);
             border: 0px;
         }
         
@@ -31,13 +31,18 @@
 <body>
     <h1>What Effects Your SAT scores?</h1>
     <p>This Visualization explores the relationship between racial demographics, test enrollment, math/english and the Average SAT Scores for NYC Public Schools</p>
+    <p>The charts below show the average SAT scores along with a relationship. Math and Reading scores are stongly positively corelated, as can be expected. </p>
+    <p>An interesting discovery that can be found is that schools that have a high number of test participation tend to have higher scores.</p>
+    <p>Another discovery that can be found is that schools with higher percentages of white and asian students tend to score higher on the SAT.</p>
+    <p>The magnitude of the negative correlations found in black and hispanic percentages are not as strong as the magnitude of the correlations between white and asian students</p>
+    <br>
     <button type="button" class="btn btn-outline-primary" id="mathVsReading" onclick="mathVsReading()">Math Scores vs Reading Scores</button>
     <button type="button" class="btn btn-outline-primary" id="percentTested" onclick="percentTested()">Percent of Students that took the SAT vs Scores  </button>
     <button type="button" class="btn btn-outline-primary" id="whiteStudentsScores" onclick="whiteDemographicChart()">Percentage of White Students in School vs Scores</button>
     <button type="button" class="btn btn-outline-primary" id="asianStudentsScores" onclick="asianDemographicChart()">Percentage of Asian Students in School vs Scores</button>
     <button type="button" class="btn btn-outline-primary" id="hispanicStudentsScores" onclick="hispanicDemographicChart()">Percentage of Hispanic Students in School vs Scores</button>
     <button type="button" class="btn btn-outline-primary" id="blackStudentsScores" onclick="blackDemographicChart()">Percentage of Black Students in School vs Scores</button>
-
+    <br>
     <svg class="chart" width="800" height="500" style="border: solid; background-color:rgb(53, 178, 228)"></svg>
     <div id="tooltip"></div>
     <script>
