@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+
+<head>
+    
+    <meta charset="utf-8">
+    <title>CS 416 Data Visualization - Narrative Visualization Project</title>
+    <meta name="author" content="Dimitar Pendurkov">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        .btn {
+            display: inline !important;
+        }
+        body {
+            display:grid;
+            place-items: center;
+            padding: 2% 10% 0% 10%;
+            background: rgb(235, 246, 250);
+        }
+        #tooltip {
+            opacity: 0;
+            position: absolute;
+            text-align: center;
+            width: 250px; height: 150px;
+            background: rgb(197, 206, 243);
+            border: 0px;
+        }
+        
+      </style>
+
+</head>
+
+<body>
+    <a href="StudentsTookSAT.html" class="btn btn-outline-primary">Back to Student Participation Page</a>
+    <br>
+    <h1>Differences in Performance based on Racial Make-Up of Schools</h1>
+    <br>
+    <p>Another discovery that can be found is that schools with higher percentages of white and asian students tend to score higher on the SAT.</p>
+    <p>The magnitude of the negative correlations found in black and hispanic percentages are not as strong as the magnitude of the correlations between white and asian students</p>
+    <br>
+    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-secondary">
+          <input type="radio" name="options" id="option1" onclick="whiteDemographicChart()" autocomplete="off" checked> White Students
+        </label>
+        <label class="btn btn-secondary">
+          <input type="radio" name="options" id="option2" onclick="asianDemographicChart()" autocomplete="off"> Asian Students 
+        </label>
+        <label class="btn btn-secondary">
+          <input type="radio" name="options" id="option3" onclick="hispanicDemographicChart()" autocomplete="off"> Hispanic Students
+        </label>
+        <label class="btn btn-secondary">
+            <input type="radio" name="options" id="option4" onclick="blackDemographicChart()" autocomplete="off"> Black Students
+          </label>
+      </div>
+    <svg class="chart" width="900" height="600" style="border: solid; background-color:rgb(53, 178, 228)"></svg>
+    <div id="tooltip"></div>
+    
+    <script>
+
+        //BLACK STUDENT PERCENTAGE PER SCHOOL VS AVERAGE SAT SCORE
+        async function blackDemographicChart() {
+            d3.selectAll("svg > *").remove();
+
+            const data = await d3.csv("https://raw.githubusercontent.com/tpjwm/tpjwm.github.io/master/data/scores.csv");
+            
+            var width = 800;
+            var height = 500;
+            var margin = 50;
+
+            var x = d3.scaleLinear().domain([600,1600]).range([0,800]); 
+            var y = d3.scaleLinear().domain([0,100]).range([500,0]);
+            
+            var tooltip = d3.select("#tooltip");
+
+            d3.select('svg')
+            .attr("width", width + 2*margin)
+            .attr("height", height + 2*margin)
+            .append('g')
+            .attr("transform", "translate("+margin+","+margin+")")
+            .selectAll().data(data).enter().append('circle')
+            .attr("cx",function(d){return x(parseInt(d["Average Score (SAT Math)"]) + parseInt(d["Average Score (SAT Reading)"]));})
+            .attr("cy",function(d){return y(parseFloat(d["Percent Black"]));})
+            .attr("r", 5)
+            .on("mouseover", function(d,i){
+                tooltip.style("opacity", 1)
+                .style("left", (event.x)/0.95 + "px") // division moves the tooltip off center to avoid covering up the data point
+                    .style("top", (event.y)/1 + "px")
+                    .html("Average SAT Score from " + d["School Name"] + " is " + ((parseInt(d["Average Score (SAT Math)"])) + (parseInt(d["Average Score (SAT Reading)"]))) + '<br>' + " Percent of Black Students : " + d["Percent Black"]);
+            })
+            .on("mouseout", function(){
+                tooltip.style("opacity", 0)
+            });
+
+            d3.select("svg").append("g")
+            .attr("transform", "translate("+margin+","+margin+")")
+            .call(d3.axisLeft(y).tickValues([0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100])
+            .tickFormat(d3.format("~s")));
+
+            d3.select("svg").append("g")
+            .attr("transform", "translate("+margin+","+(margin+height)+")")
+            .call(d3.axisBottom(x).tickValues([600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600])
+            .tickFormat(d3.format("~s")));
+        }
+
+        //HISPANIC STUDENT PERCENTAGE PER SCHOOL VS AVERAGE SAT SCORE
+        async function hispanicDemographicChart() {
+            d3.selectAll("svg > *").remove();
+
+            const data = await d3.csv("https://raw.githubusercontent.com/tpjwm/tpjwm.github.io/master/data/scores.csv");
+            
+            var width = 800;
+            var height = 500;
+            var margin = 50;
+
+            var x = d3.scaleLinear().domain([600,1600]).range([0,800]); 
+            var y = d3.scaleLinear().domain([0,100]).range([500,0]);
+            
+            var tooltip = d3.select("#tooltip");
+
+            d3.select('svg')
+            .attr("width", width + 2*margin)
+            .attr("height", height + 2*margin)
+            .append('g')
+            .attr("transform", "translate("+margin+","+margin+")")
+            .selectAll().data(data).enter().append('circle')
+            .attr("cx",function(d){return x(parseInt(d["Average Score (SAT Math)"]) + parseInt(d["Average Score (SAT Reading)"]));})
+            .attr("cy",function(d){return y(parseFloat(d["Percent Hispanic"]));})
+            .attr("r", 5)
+            .on("mouseover", function(d,i){
+                tooltip.style("opacity", 1)
+                    .style("left", (event.x)/0.95 + "px") // division moves the tooltip off center to avoid covering up the data point
+                    .style("top", (event.y)/1 + "px")
+                    .html("Average SAT Score from " + d["School Name"] + " is " + ((parseInt(d["Average Score (SAT Math)"])) + (parseInt(d["Average Score (SAT Reading)"]))) + '<br>' + " Percent of Hispanic Students : " + d["Percent Hispanic"]);
+            })
+            .on("mouseout", function(){
+                tooltip.style("opacity", 0)
+            });
+
+            d3.select("svg").append("g")
+            .attr("transform", "translate("+margin+","+margin+")")
+            .call(d3.axisLeft(y).tickValues([0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100])
+            .tickFormat(d3.format("~s")));
+
+            d3.select("svg").append("g")
+            .attr("transform", "translate("+margin+","+(margin+height)+")")
+            .call(d3.axisBottom(x).tickValues([600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600])
+            .tickFormat(d3.format("~s")));
+        }
+
+        //ASIAN STUDENT PERCENTAGE PER SCHOOL VS AVERAGE SAT SCORE
+        async function asianDemographicChart() {
+            d3.selectAll("svg > *").remove();
+
+            const data = await d3.csv("https://raw.githubusercontent.com/tpjwm/tpjwm.github.io/master/data/scores.csv");
+            
+            var width = 800;
+            var height = 500;
+            var margin = 50;
+
+            var x = d3.scaleLinear().domain([600,1600]).range([0,800]); 
+            var y = d3.scaleLinear().domain([0,90]).range([500,0]);
+            
+            var tooltip = d3.select("#tooltip");
+
+            d3.select('svg')
+            .attr("width", width + 2*margin)
+            .attr("height", height + 2*margin)
+            .append('g')
+            .attr("transform", "translate("+margin+","+margin+")")
+            .selectAll().data(data).enter().append('circle')
+            .attr("cx",function(d){return x(parseInt(d["Average Score (SAT Math)"]) + parseInt(d["Average Score (SAT Reading)"]));})
+            .attr("cy",function(d){return y(parseFloat(d["Percent Asian"]));})
+            .attr("r", 5)
+            .on("mouseover", function(d,i){
+                tooltip.style("opacity", 1)
+                    .style("left", (event.x)/0.95 + "px") // division moves the tooltip off center to avoid covering up the data point
+                    .style("top", (event.y)/1 + "px")
+                    .html("Average SAT Score from " + d["School Name"] + " is " + ((parseInt(d["Average Score (SAT Math)"])) + (parseInt(d["Average Score (SAT Reading)"]))) + '<br>' + " Percent of Asian Students : " + d["Percent Asian"]);
+            })
+            .on("mouseout", function(){
+                tooltip.style("opacity", 0)
+            });
+
+            d3.select("svg").append("g")
+            .attr("transform", "translate("+margin+","+margin+")")
+            .call(d3.axisLeft(y).tickValues([0, 10, 20, 30, 40, 50, 60, 70, 80, 90])
+            .tickFormat(d3.format("~s")));
+
+            d3.select("svg").append("g")
+            .attr("transform", "translate("+margin+","+(margin+height)+")")
+            .call(d3.axisBottom(x).tickValues([400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600])
+            .tickFormat(d3.format("~s")));
+        }
+        
+        //WHITE STUDENT PERCENTAGE PER SCHOOL VS AVERAGE SAT SCORE
+        async function whiteDemographicChart() {
+            d3.selectAll("svg > *").remove();
+
+            const data = await d3.csv("https://raw.githubusercontent.com/tpjwm/tpjwm.github.io/master/data/scores.csv");
+            
+            var width = 800;
+            var height = 500;
+            var margin = 50;
+
+            var x = d3.scaleLinear().domain([600,1600]).range([0,800]); 
+            var y = d3.scaleLinear().domain([0,90]).range([500,0]);
+            
+            var tooltip = d3.select("#tooltip");
+
+            d3.select('svg')
+            .attr("width", width + 2*margin)
+            .attr("height", height + 2*margin)
+            .append('g')
+            .attr("transform", "translate("+margin+","+margin+")")
+            .selectAll().data(data).enter().append('circle')
+            .attr("cx",function(d){return x(parseInt(d["Average Score (SAT Math)"]) + parseInt(d["Average Score (SAT Reading)"]));})
+            .attr("cy",function(d){return y(parseFloat(d["Percent White"]));})
+            .attr("r", 5)
+            .on("mouseover", function(d,i){
+                tooltip.style("opacity", 1)
+                    .style("left", (event.x)/0.95 + "px") // division moves the tooltip off center to avoid covering up the data point
+                    .style("top", (event.y)/1 + "px")
+                    .html("Average SAT Score from " + d["School Name"] + " is " + ((parseInt(d["Average Score (SAT Math)"])) + (parseInt(d["Average Score (SAT Reading)"]))) + '<br>' + " Percent of White Students : " + d["Percent White"]);
+            })
+            .on("mouseout", function(){
+                tooltip.style("opacity", 0)
+            });
+
+            d3.select("svg").append("g")
+            .attr("transform", "translate("+margin+","+margin+")")
+            .call(d3.axisLeft(y).tickValues([0, 10, 20, 30, 40, 50, 60, 70, 80, 90])
+            .tickFormat(d3.format("~s")));
+
+            d3.select("svg").append("g")
+            .attr("transform", "translate("+margin+","+(margin+height)+")")
+            .call(d3.axisBottom(x).tickValues([400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600])
+            .tickFormat(d3.format("~s")));
+        }
+    </script>
+
+    <br>
+    <a href="index.html" class="btn btn-outline-primary">Main Page</a>
+    <br>
+</body>
