@@ -31,14 +31,11 @@
 <body>
     <a href="index.html" class="btn btn-outline-primary">Back to Main Page</a>
     <br>
-    <h1>What Effects Your SAT scores?</h1>
-    <p>This Visualization explores the relationship between racial demographics, test enrollment, math/english and the Average SAT Scores for NYC Public Schools</p>
-    <p>The charts below show the average SAT scores along with a relationship. Math and Reading scores are stongly positively corelated, as can be expected. </p>
+    <h1>School Participation vs SAT Score</h1>
     <p>An interesting discovery that can be found is that schools that have a high number of test participation tend to have higher scores.</p>
-    <p>Another discovery that can be found is that schools with higher percentages of white and asian students tend to score higher on the SAT.</p>
-    <p>The magnitude of the negative correlations found in black and hispanic percentages are not as strong as the magnitude of the correlations between white and asian students</p>
     <br>
 
+    <label> Percent of Students That Took the SAT in Each School vs Average SAT Score Composite (Math + English) </label>
     <svg class="chart" width="900" height="600" style="border: solid; background-color:rgb(53, 178, 228)"></svg>
     <div id="tooltip"></div>
     <script>
@@ -91,7 +88,7 @@
         percentTested();
     </script>
     <br>
-
+    <p>While not as strong and straightforward as the Math vs English scores chart, it is clear that there is a strong positive correlation trend.</p>
     <a href="interactive.html" class="btn btn-outline-primary">Racial Demographics Info</a>
     <br>
 </body>
