@@ -8,6 +8,7 @@
     <meta name="description" content="">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.5.1/d3-annotation.min.js"></script>
     <style>
         body {
           display: grid;
@@ -85,6 +86,39 @@
             .attr("transform", "translate("+margin+","+(margin+height)+")")
             .call(d3.axisBottom(x).tickValues([300,350,400,450,500,550, 600, 650, 700, 750])
             .tickFormat(d3.format("~s")));
+
+            //Annotations
+            const annotations = [
+        {
+          note: {
+            label: "The correlation seen here is very strong with only a few outliers",
+            title: "Correlation"
+          },
+          x: 350,
+          y: 350,
+          dy: -137,
+          dx: -162
+        },
+        {
+            note: {
+            label: "Note that the sparsity of higher scoring schools affects both Math and English scores",
+            title: "Sparsity"
+          },
+          x: 650,
+          y: 150,
+          dy: -1,
+          dx: -1
+        }].map(function(d){ d.color = "#000066"; return d})
+
+            const makeAnnotations = d3.annotation()
+            .type(d3.annotationLabel)
+            .annotations(annotations)
+
+            d3.select("svg")
+            .append("g")
+            .attr("class", "annotation-group")
+            .call(makeAnnotations)
+
         }
         mathVsReading();
     </script>
