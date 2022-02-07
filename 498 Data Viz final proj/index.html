@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+
+<head>
+    
+    <meta charset="utf-8">
+    <title>CS 416 Data Visualization - Narrative Visualization Project</title>
+    <meta name="author" content="Dimitar Pendurkov">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.5.1/d3-annotation.min.js"></script>
+    <style>
+        body {
+          display: grid;
+          place-items: center;
+          padding: 5% 10% 0% 10%;
+          background: rgb(235, 246, 250);
+        }
+        #tooltip {
+            opacity: 0;
+            position: absolute;
+            text-align: center;
+            width: 250px; height: 150px;
+            background: rgb(197, 206, 243);
+            border: 0px;
+        }
+        
+      </style>
+
+</head>
+
+<body>
+    <h1>What Affects Your SAT scores?</h1>
+    <p>This Visualization explores the relationship between racial demographics, test enrollment, math/english and the Average SAT Scores for NYC Public Schools</p>
+    <p>The chart below shows the correlation between the Schools' Math Scores and English Scores on the SAT.</p>
+
+    <br>
+    <label> Average Reading Score vs Average Math Score on the SAT per school</label>
+
+    <svg class="chart" width="900" height="600" style="border: solid; background-color:rgb(53, 178, 228)"></svg>
+    <div id="tooltip"></div>
+    <script>
+        //MATH SCORES VS READING SCORES CHART
+        
+        async function mathVsReading() {
+            d3.selectAll("svg > *").remove();
+
+            const data = await d3.csv("https://raw.githubusercontent.com/tpjwm/tpjwm.github.io/master/data/scores.csv");
+            
+            var width = 800;
+            var height = 500;
+            var margin = 50;
+
+            var x = d3.scaleLinear().domain([300,760]).range([0,800]); //300 to 800 as the scores are between those values
+            var y = d3.scaleLinear().domain([300,760]).range([500,0]);
+
+            
+            var tooltip = d3.select("#tooltip");
+
+
+            d3.select('svg')
+            .attr("width", width + 2*margin)
+            .attr("height", height + 2*margin)
+            .append('g')
+            .attr("transform", "translate("+margin+","+margin+")")
+            .selectAll().data(data).enter().append('circle')
+            .attr("cx",function(d){return x(parseInt(d["Average Score (SAT Math)"]));})
+            .attr("cy",function(d){return y(parseInt(d["Average Score (SAT Reading)"]));})
+            .attr("r", 5)
+            .on("mouseover", function(d,i){
+                tooltip.style("opacity", 1)
+                    .style("left", (event.x)/0.95 + "px") // division moves the tooltip off center to avoid covering up the data point
+                    .style("top", (event.y)/1.4 + "px")
+                    .html("Average scores from " + d["School Name"] + " are " + '<br>' +"Math: " + d["Average Score (SAT Math)"] + '<br>' + " Reading: " + (parseInt(d["Average Score (SAT Reading)"])));
+            })
+            .on("mouseout", function(){
+                tooltip.style("opacity", 0)
+            });
+
+            d3.select("svg").append("g")
+            .attr("transform", "translate("+margin+","+margin+")")
+            .call(d3.axisLeft(y).tickValues([300,350,400,450,500,550, 600, 650, 700, 750])
+            .tickFormat(d3.format("~s")));
+
+            d3.select("svg").append("g")
+            .attr("transform", "translate("+margin+","+(margin+height)+")")
+            .call(d3.axisBottom(x).tickValues([300,350,400,450,500,550, 600, 650, 700, 750])
+            .tickFormat(d3.format("~s")));
+
+            //Annotations
+            const annotations = [
+        {
+          note: {
+            label: "The correlation seen here is very strong with only a few outliers",
+            title: "Correlation"
+          },
+          x: 350,
+          y: 350,
+          dy: -137,
+          dx: -162
+        },
+        {
+            note: {
+            label: "Note that the sparsity of higher scoring schools affects both Math and English scores",
+            title: "Sparsity"
+          },
+          x: 650,
+          y: 150,
+          dy: -1,
+          dx: -1
+        }].map(function(d){ d.color = "#000066"; return d})
+
+            const makeAnnotations = d3.annotation()
+            .type(d3.annotationLabel)
+            .annotations(annotations)
+
+            d3.select("svg")
+            .append("g")
+            .attr("class", "annotation-group")
+            .call(makeAnnotations)
+
+        }
+        mathVsReading();
+    </script>
+    <br>
+    <p>This result has a very strong correlation with only a few outliers. </p>
+    <p>Interestingly, the outlier that do exist tend to be Schools who did worse on the English section of the SAT.</p>
+    <p>This could be caused by schools who have a high foreign population of students who may not know English as well as Math</p>
+    <a href="StudentsTookSAT.html" class="btn btn-outline-primary">Test Participation Info</a>
+    <br>
+</body>

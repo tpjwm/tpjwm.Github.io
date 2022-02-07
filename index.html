@@ -1,131 +1,134 @@
 <!DOCTYPE html>
+<!-- saved from url=(0035)https://powerlanguage.co.uk/wordle/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-<head>
-    
-    <meta charset="utf-8">
-    <title>CS 416 Data Visualization - Narrative Visualization Project</title>
-    <meta name="author" content="Dimitar Pendurkov">
-    <meta name="description" content="">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://d3js.org/d3.v5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.5.1/d3-annotation.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <title>Wordle - A daily word game</title>
+    <meta name="description" content="Guess the hidden word in 6 tries. A new puzzle is available each day.">
+
+    <!-- FB Meta Tags -->
+    <meta property="og:url" content="https://www.powerlanguage.co.uk/wordle/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Wordle - A daily word game">
+    <meta property="og:description" content="Guess the hidden word in 6 tries. A new puzzle is available each day.">
+    <meta property="og:image" content="https://www.dailywordle.com/images/wordle_og_1200x630.png">
+
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="powerlanguage.co.uk">
+
+    <meta name="theme-color" content="#6aaa64">
+    <link rel="manifest" href="https://powerlanguage.co.uk/wordle/manifest.json">
+    <link href="https://powerlanguage.co.uk/wordle/images/wordle_logo_32x32.png" rel="icon shortcut" sizes="3232">
+    <link href="https://powerlanguage.co.uk/wordle/images/wordle_logo_192x192.png" rel="apple-touch-icon">
+
     <style>
-        body {
-          display: grid;
-          place-items: center;
-          padding: 5% 10% 0% 10%;
-          background: rgb(235, 246, 250);
-        }
-        #tooltip {
-            opacity: 0;
-            position: absolute;
-            text-align: center;
-            width: 250px; height: 150px;
-            background: rgb(197, 206, 243);
-            border: 0px;
-        }
-        
-      </style>
-
-</head>
-
-<body>
-    <h1>What Affects Your SAT scores?</h1>
-    <p>This Visualization explores the relationship between racial demographics, test enrollment, math/english and the Average SAT Scores for NYC Public Schools</p>
-    <p>The chart below shows the correlation between the Schools' Math Scores and English Scores on the SAT.</p>
-
-    <br>
-    <label> Average Reading Score vs Average Math Score on the SAT per school</label>
-
-    <svg class="chart" width="900" height="600" style="border: solid; background-color:rgb(53, 178, 228)"></svg>
-    <div id="tooltip"></div>
+      /* Global Styles & Colors */
+      :root {
+        --green: #6aaa64;
+        --darkendGreen: #538d4e;
+        --yellow: #c9b458;
+        --darkendYellow: #b59f3b;
+        --lightGray: #d8d8d8;
+        --gray: #86888a;
+        --darkGray: #939598;
+        --white: #fff;
+        --black: #212121;
+        /* Colorblind colors */
+        --orange: #f5793a;
+        --blue: #85c0f9;
+        font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
+        font-size: 16px;
+        --header-height: 50px;
+        --keyboard-height: 200px;
+        --game-max-width: 500px;
+      }
+      /* Light theme colors */
+      :root {
+        --color-tone-1: #1a1a1b;
+        --color-tone-2: #787c7e;
+        --color-tone-3: #878a8c;
+        --color-tone-4: #d3d6da;
+        --color-tone-5: #edeff1;
+        --color-tone-6: #f6f7f8;
+        --color-tone-7: #ffffff;
+        --opacity-50: rgba(255, 255, 255, 0.5);
+      }
+      /* Dark Theme Colors */
+      .nightmode {
+        --color-tone-1: #d7dadc;
+        --color-tone-2: #818384;
+        --color-tone-3: #565758;
+        --color-tone-4: #3a3a3c;
+        --color-tone-5: #272729;
+        --color-tone-6: #1a1a1b;
+        --color-tone-7: #121213;
+        --opacity-50: rgba(0, 0, 0, 0.5);
+      }
+      /* Constant colors and colors derived from theme */
+      :root,
+      .nightmode {
+        --color-background: var(--color-tone-7);
+      }
+      :root {
+        --color-present: var(--yellow);
+        --color-correct: var(--green);
+        --color-absent: var(--color-tone-2);
+        --tile-text-color: var(--color-tone-7);
+        --key-text-color: var(--color-tone-1);
+        --key-evaluated-text-color: var(--color-tone-7);
+        --key-bg: var(--color-tone-4);
+        --key-bg-present: var(--color-present);
+        --key-bg-correct: var(--color-correct);
+        --key-bg-absent: var(--color-absent);
+        --modal-content-bg: var(--color-tone-7);
+      }
+      .nightmode {
+        --color-present: var(--darkendYellow);
+        --color-correct: var(--darkendGreen);
+        --color-absent: var(--color-tone-4);
+        --tile-text-color: var(--color-tone-1);
+        --key-text-color: var(--color-tone-1);
+        --key-evaluated-text-color: var(--color-tone-1);
+        --key-bg: var(--color-tone-2);
+        --key-bg-present: var(--color-present);
+        --key-bg-correct: var(--color-correct);
+        --key-bg-absent: var(--color-absent);
+        --modal-content-bg: var(--color-tone-7);
+      }
+      .colorblind {
+        --color-correct: var(--orange);
+        --color-present: var(--blue);
+        --tile-text-color: var(--white);
+        --key-bg-present: var(--color-present);
+        --key-bg-correct: var(--color-correct);
+        --key-bg-absent: var(--color-absent);
+      }
+      html {
+        height: 100%;
+      }
+      body {
+        height: 100%;
+        background-color: var(--color-background);
+        margin: 0;
+        padding: 0;
+        /* Prevent scrollbar appearing on page transition */
+        overflow-y: hidden;
+      }
+    </style>
+  </head>
+  <body class="nightmode">
+    <script async="" src="./Wordle - A daily word game_files/js"></script>
     <script>
-        //MATH SCORES VS READING SCORES CHART
-        
-        async function mathVsReading() {
-            d3.selectAll("svg > *").remove();
-
-            const data = await d3.csv("https://raw.githubusercontent.com/tpjwm/tpjwm.github.io/master/data/scores.csv");
-            
-            var width = 800;
-            var height = 500;
-            var margin = 50;
-
-            var x = d3.scaleLinear().domain([300,760]).range([0,800]); //300 to 800 as the scores are between those values
-            var y = d3.scaleLinear().domain([300,760]).range([500,0]);
-
-            
-            var tooltip = d3.select("#tooltip");
-
-
-            d3.select('svg')
-            .attr("width", width + 2*margin)
-            .attr("height", height + 2*margin)
-            .append('g')
-            .attr("transform", "translate("+margin+","+margin+")")
-            .selectAll().data(data).enter().append('circle')
-            .attr("cx",function(d){return x(parseInt(d["Average Score (SAT Math)"]));})
-            .attr("cy",function(d){return y(parseInt(d["Average Score (SAT Reading)"]));})
-            .attr("r", 5)
-            .on("mouseover", function(d,i){
-                tooltip.style("opacity", 1)
-                    .style("left", (event.x)/0.95 + "px") // division moves the tooltip off center to avoid covering up the data point
-                    .style("top", (event.y)/1.4 + "px")
-                    .html("Average scores from " + d["School Name"] + " are " + '<br>' +"Math: " + d["Average Score (SAT Math)"] + '<br>' + " Reading: " + (parseInt(d["Average Score (SAT Reading)"])));
-            })
-            .on("mouseout", function(){
-                tooltip.style("opacity", 0)
-            });
-
-            d3.select("svg").append("g")
-            .attr("transform", "translate("+margin+","+margin+")")
-            .call(d3.axisLeft(y).tickValues([300,350,400,450,500,550, 600, 650, 700, 750])
-            .tickFormat(d3.format("~s")));
-
-            d3.select("svg").append("g")
-            .attr("transform", "translate("+margin+","+(margin+height)+")")
-            .call(d3.axisBottom(x).tickValues([300,350,400,450,500,550, 600, 650, 700, 750])
-            .tickFormat(d3.format("~s")));
-
-            //Annotations
-            const annotations = [
-        {
-          note: {
-            label: "The correlation seen here is very strong with only a few outliers",
-            title: "Correlation"
-          },
-          x: 350,
-          y: 350,
-          dy: -137,
-          dx: -162
-        },
-        {
-            note: {
-            label: "Note that the sparsity of higher scoring schools affects both Math and English scores",
-            title: "Sparsity"
-          },
-          x: 650,
-          y: 150,
-          dy: -1,
-          dx: -1
-        }].map(function(d){ d.color = "#000066"; return d})
-
-            const makeAnnotations = d3.annotation()
-            .type(d3.annotationLabel)
-            .annotations(annotations)
-
-            d3.select("svg")
-            .append("g")
-            .attr("class", "annotation-group")
-            .call(makeAnnotations)
-
-        }
-        mathVsReading();
+      (function () {
+        // Defining the hash before the main bundle allows the bundle access window.hash
+        window.wordle = window.wordle || {};
+        window.wordle.hash = 'e65ce0a5';
+      })();
     </script>
-    <br>
-    <p>This result has a very strong correlation with only a few outliers. </p>
-    <p>Interestingly, the outlier that do exist tend to be Schools who did worse on the English section of the SAT.</p>
-    <p>This could be caused by schools who have a high foreign population of students who may not know English as well as Math</p>
-    <a href="StudentsTookSAT.html" class="btn btn-outline-primary">Test Participation Info</a>
-    <br>
-</body>
+    <script src="./Wordle - A daily word game_files/main.e65ce0a5.js"></script>
+    <game-app></game-app>
+
+
+</body></html>
