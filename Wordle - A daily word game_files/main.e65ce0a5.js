@@ -985,10 +985,7 @@ this.wordle = this.wordle || {}, this.wordle.bundle = function(e) {
  864e5 appears multiple times - it represents the number of milliseconds in a 24 hour day
  */
   function Na(e, a) {
-    var s = new Date(e),
-      t = new Date(a).setHours(0, 0, 0, 0) - s.setHours(0, 0, 0, 0);
-
-    return Math.round(t / 864e5 * Math.random())
+    return Math.round(Math.random() * 2315)
   }
 
   function Da(e) {
