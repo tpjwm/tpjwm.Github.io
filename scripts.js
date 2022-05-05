@@ -27,8 +27,7 @@ function combineShit(){
             var img = document.createElement("img");
             img.src = Bfiles[j][i];
             img.id = counter;
-            img.width = 200;
-            img.height = 200;
+
             img.alt = "haha no";
             justArray.push(img);
             // This next line will just add it to the <body> tag
@@ -53,6 +52,7 @@ function combineShit(){
     }
     shuffleArray(randomizerArr);
     globalArr = randomizerArr;
+    console.log("Number of results:" + randomizerArr.length);
     for(var i =0; i < randomizerArr.length; i++){
         document.body.appendChild(randomizerArr[i]);
     }
