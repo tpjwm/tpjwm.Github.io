@@ -53,6 +53,8 @@ function combineShit(){
     shuffleArray(randomizerArr);
     globalArr = randomizerArr;
     console.log("Number of results:" + randomizerArr.length);
+    let counterDisplay = document.querySelector('.counter-display');
+    counterDisplay.innerHTML = randomizerArr.length;
     for(var i =0; i < randomizerArr.length; i++){
         document.body.appendChild(randomizerArr[i]);
     }
