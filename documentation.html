@@ -1,0 +1,338 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Nissin Documentation</title>
+    <meta name="description" content="A simple HTML/CSS Documentation site">
+    <meta name="author" content="Dimitar Pendurkov">
+
+    <link rel="stylesheet" href="style.css?">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Open+Sans:ital,wght@0,400;0,700;1,600&display=swap" rel="stylesheet">
+    
+    <script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js" integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP" crossorigin="anonymous"></script>
+
+
+</head>
+
+<body>
+
+    <div class="container clear">
+        <div class="row wrapper">
+
+            <div class="sidepanel">
+
+                <a class="title" href="#">Introduction</a>
+                
+                <!-- <a class="section" href="#">Supported Versions</a> -->
+                <!-- <a class="section" href="#technology">Technology</a> -->
+
+                <div class="divider left"></div>
+
+                <!-- <a class="title" href="#gettingstarted">Getting Started</a>
+
+                <a class="section" href="#installingapp">Installing the App</a>
+                 <a class="section" href="#openingapp">Opening the App</a> -->
+
+                <!-- <div class="divider left"></div> -->
+
+                <a class="title" href="#functions">Functions</a>
+
+                <a class="section" href="#buildLCLs">buildLCLs</a>
+                <a class="section" href="#buildColoads">buildColoads</a>
+                <a class="section" href="#buildFCLs">buildFCLs</a>
+                <!-- <a class="section" href="#feature3">Feature 4</a>
+                <a class="section" href="#feature3">Feature 5</a> -->
+
+                <div class="divider left"></div>
+
+                <a class="title" href="#usage">Usage</a>
+
+                <div class="divider left"></div>
+
+                <a class="title" href="#global-variables">Global Variables</a>
+                <a class="section" href="#lclshipments">buildLCLs</a>
+                <a class="section" href="#coloadshipments">buildColoads</a>
+                <a class="section" href="#fclshipments">buildFCLs</a>
+
+                <!-- <div class="divider left"></div> -->
+
+                <!-- <a class="title" href="#moreinfo">More Info</a> -->
+            
+             <div class="space double"></div>
+
+            </div>
+
+            <div class="right-col">
+            
+                <h1 >Introduction</h1>
+                
+                <p>
+                    Documentation for the NISSINObjects library written in google apps scripts by yours truly.
+                    
+                </p> 
+        <div class="divider" style="width:24%; margin:30px 0;"></div>
+
+                <h2 id="functions">Functions:</h2>
+                <p id="buildObjects"><code>buildObjects()</code>: updates / builds all the shipments (including <code>lclShipments</code>, <code>fclShipments</code>, and <code>coloadShipments</code>) and returns <code>allShipments</code></p>
+                <p id="buildLCLs"><code>buildLCLs()</code>: updates and returns <code>lclShipments</code></p>
+                <p id="buildColoads"><code>buildColoads()</code>: updates and returns `coloadShipments</p>
+                <p id="buildFCLs"><code>buildFCLs()</code>:updates and returns `fclShipments</p>
+        <div class="divider" style="width:24%; margin:30px 0;"></div>
+
+                <h2 id="usage">Usage:</h2>
+                <p>An example of how this is used:</p>
+                <pre><code class="JS language-JS">
+    NISSINObjects.buildObjects();
+
+    var shipments = NISSINObjects.allShipments;
+                </code></pre>
+                <p>The first line updates / builds the objects, and the second utilizes the global variable within <code>NISSINObjects</code>. You can achieve the same functionality with the following:</p>
+                <pre><code class="js language-js">  var shipments = NISSINObjects.buildObjects();
+                </code></pre>
+                <p>But the <code>buildObjects</code> function is purposely decoupled so you do not have to re-build all shipments every time. And saves you from keeping track / creating your own global variables for shipment types. </p>
+                <p>Ex:</p>
+                <pre><code class="js language-js">
+    // Update / build objects ONCE
+    NISSINObjects.buildObjects();
+                
+    var lcls = NISSINObjects.lclShipments;
+    // Process lcls for something
+
+    var fcls = NISSINObjects.fclShipments;
+    // Process fcls for something
+
+    var coloads = NISSINObjects.coloadShipments;
+    // Process coloads for something
+                </code></pre>
+
+
+        <div class="divider" style="width:24%; margin:30px 0;"></div>
+
+            <h2 id="global-variables">Global Variables:</h2>
+            <p><strong>Remember that accessing any of these values/objects is CASE SENSITIVE</strong></p>
+            <p><code>allShipments</code> - object containing 3 arrays "LCLs", "Coloads", and "FCLs". Access individual arrays like this: allShipments["LCLs"] -&gt; this will give you exactly what is in <code>lclShipments</code></p>
+            <h3 id="lclshipments"><code>lclShipments</code></h3>
+            <ul>
+            <li>object containing all the LCL shipment objects. It is structured like this:</li>
+            </ul>
+            <pre><code class="C++ language-C++">
+    Shipment_1
+        mbl
+            number
+            vesselNumber
+            port
+            gtcNumber
+            logNumber
+            etaPort
+            ataPort
+            discharge
+            railConnect
+            turnOver
+            chiCy
+                ATA
+                ETA
+            chiCyInfo
+                PTT
+                LFD
+                PickUpNum
+            nitchiInfo
+                ETA
+                ATA
+                Avail
+                LFD
+        hbls
+            0
+                hblNumber
+                status
+                toDo
+                isfFiling
+                ace
+                entryPackageReceived
+                partialBilling
+                billing
+                gtcNumber
+                incoTerms
+                deliveryLocation
+                doSets
+                toDoorDO
+                puNumber
+                pod
+                nnPuNumber
+                nnDO
+            1
+            2
+            ... (etc)
+        container
+            number
+            seal
+            size
+        shipmentType: "LCL"
+        start: This is the start row # in the actual sheets
+        end: This is the end row # in the actual sheets
+    Shipment_2
+    ... etc
+            </code></pre>
+            <ul>
+            <li><code>hbls</code> is an array which can hold 1 or more values, the size of the array can be accessed with <code>.length</code> (<em>i.e.</em> <code>NISSINObjects.lclShipments.Shipment_1.hbls.length</code>). Although in reality, you will be using helper functions to access individual hbls most of the time.</li>
+            <li>An example for accessing logNumber from mbl: <code>NISSINObjects.lclShipments.Shipment_1.mbl.logNumber</code></li>
+            </ul>
+            <h3 id="coloadshipments"><code>coloadShipments</code></h3>
+            <ul>
+            <li>object containing all the coload shipment objects. It is structured like this:</li>
+            </ul>
+            <pre><code class="C++ language-C++">
+    Shipment_1
+        mbl
+            number
+            sblNumber
+            type
+            vesselNumber
+            port
+            gtcNumber
+            logNumber
+            etaPort
+            ataPort
+            discharge
+            railConnect
+            turnOver
+            cfs
+            cfsDates
+                ATA
+                ETA
+            cfsInfo
+                DOandAce
+                LFD
+                PickUpNum
+            te1AndPickup
+                TE1
+                PickedUp
+            nitchiInfo
+                ETA
+                ATA
+                Avail
+                LFD
+        hbls
+            0
+                hblNumber
+                status
+                toDo
+                isfFiling
+                ace
+                entryPackageReceived
+                cl2Fee
+                te1Fee
+                partialBilling
+                billing
+                gtcNumber
+                incoTerms
+                deliveryLocation
+                doSets
+                toDoorDO
+                puNumber
+                pod
+                nnPuNumber
+                nnDO
+            1
+            2
+            ... (etc)
+        container
+            number
+            seal
+            size
+        shipmentType: "Coload"
+        start: This is the start row # in the actual sheets
+        end: This is the end row # in the actual sheets
+    Shipment_2
+    ... etc
+    </code></pre>
+    <ul>
+    <li>An example for accessing logNumber from mbl: <code>NISSINObjects.coloadShipments.Shipment_1.mbl.logNumber</code></li>
+    </ul>
+    <h3 id="fclshipments"><code>fclShipments</code></h3>
+    <ul>
+    <li>object containing all the fcl shipment objects. It is structured like this:</li>
+    </ul>
+    <pre><code class="C++ language-C++">
+    Shipment_1
+        mbl
+            number
+            vesselNumber
+            port
+            gtcNumber
+            logNumber
+        hbl
+            hblNumber
+            toDo
+            isfFiling
+            ace
+            entryPackageReceived
+            sl1Fee
+            partialBilling
+            billing
+            gtcNumber
+            incoTerms
+            deliveryLocation
+            doSets
+            toDoorDO
+            puNumber
+            pod
+            nnPuNumber
+            nnDO
+        containers
+            0
+                status
+                number
+                size
+                sealNumber
+                etaPort
+                ataPort
+                discharge
+                railConnect
+                chiCy
+                    ATA
+                    ETA
+                    pickedUp
+                chiCyInfo
+                    grounded
+                    LFD
+                    PUNumber
+                    pickUpNumber
+                nitchiInfo
+                    ETA
+                    ATA
+                    Avail
+                    LFD
+                emptyReturn
+            1
+            2
+            ...(etc)
+        shipmentType: "FCL"
+        start: This is the start row # in the actual sheets
+        end: This is the end row # in the actual sheets // Currently Broken
+    Shipment_2
+    ... etc
+            </code></pre>
+            <ul>
+            <li>In this case, hbl is not an array just 1 object, so it will be accessed: <code>NISSINObjects.fclShipments.Shipment_1.hbl</code></li>
+            <li>containers is now an array with a length value</li>
+            </ul>
+                    
+                <div class="doublespace"></div>
+                <div class="divider" style="width:24%; margin:30px 0;"></div>
+                
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+</body>
+
+</html>
