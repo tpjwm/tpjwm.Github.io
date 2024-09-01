@@ -24,7 +24,7 @@
     <div class="container">
         <div class="row wrapper">
 
-            <div id="default-sidebar" class="text-xl fixed top-1/3 left-1/5 z-1 w-1 transition-transform -translate-x-full sm:translate-x-0 -translate-y-1/2" aria-label="Sidebar">
+            <div id="default-sidebar" class="text-xl fixed top-1/3 left-1 z-1 w-1 transition-transform -translate-x-full sm:translate-x-0 -translate-y-1/2" aria-label="Sidebar">
                 <a class="title" href="#">Introduction</a>
                 
                 <!-- <a class="section" href="#">Supported Versions</a> -->
@@ -39,11 +39,19 @@
 
                 <!-- <div class="divider left"></div> -->
 
-                <a class="title" href="#functions">Functions</a>
-
+                <a class="title" href="#functions">F͟u͟n͟c͟t͟i͟o͟n͟s͟</a>
                 <a class="section" href="#buildLCLs">buildLCLs</a>
                 <a class="section" href="#buildColoads">buildColoads</a>
                 <a class="section" href="#buildFCLs">buildFCLs</a>
+                <a class="section" href="#getLCLShipmentFromHBL">getLCLShipmentFromHBL</a>
+                <a class="section" href="#getColoadShipmentFromHBL">getColoadShipmentFromHBL</a>
+                <a class="section" href="#getFCLShipmentFromHBL">getFCLShipmentFromHBL</a>
+                <a class="section" href="#getShipmentFromHBL">getShipmentFromHBL</a>
+                <a class="section" href="#getAllLCLHBLs">getAllLCLHBLs</a>
+                <a class="section" href="#getAllColoadHBLs">getAllColoadHBLs</a>
+                <a class="section" href="#getAllFCLHBLs">getAllFCLHBLs</a>
+                <a class="section" href="#getAllHBLs">getAllHBLs</a>
+
                 <!-- <a class="section" href="#feature3">Feature 4</a>
                 <a class="section" href="#feature3">Feature 5</a> -->
 
@@ -53,7 +61,7 @@
 
                 <div class="divider left"></div>
 
-                <a class="title" href="#global-variables">Global Variables</a>
+                <a class="title" href="#global-variables">G͟l͟o͟b͟a͟l͟s</a>
                 <a class="section" href="#lclshipments">buildLCLs</a>
                 <a class="section" href="#coloadshipments">buildColoads</a>
                 <a class="section" href="#fclshipments">buildFCLs</a>
@@ -79,8 +87,18 @@
                 <h1 id="functions">Functions:</h1>
                 <p id="buildObjects"><code>buildObjects()</code>: updates / builds all the shipments (including <code>lclShipments</code>, <code>fclShipments</code>, and <code>coloadShipments</code>) and returns <code>allShipments</code></p>
                 <p id="buildLCLs"><code>buildLCLs()</code>: updates and returns <code>lclShipments</code></p>
-                <p id="buildColoads"><code>buildColoads()</code>: updates and returns `coloadShipments</p>
-                <p id="buildFCLs"><code>buildFCLs()</code>:updates and returns `fclShipments</p>
+                <p id="buildColoads"><code>buildColoads()</code>: updates and returns <code>coloadShipments</code></p>
+                <p id="buildFCLs"><code>buildFCLs()</code>:updates and returns <code>fclShipments</code></p>
+                <p id="getLCLShipmentFromHBL"><code>getLCLShipmentFromHBL(hblNumber, lclShipments)</code>: returns the matching shipment object from the lclShipments objects provided</p>
+                <p id="getColoadShipmentFromHBL"><code>getColoadShipmentFromHBL(hblNumber, coloadShipments)</code>: returns the matching shipment object from the coloadShipments objects provided</p>
+                <p id="getFCLShipmentFromHBL"><code>getFCLShipmentFromHBL(hblNumber, fclShipments)</code>: returns the matching shipment object from the fclShipments objects provided</p>
+                <p id="getShipmentFromHBL"><code>getShipmentFromHBL(hblNumber, allShipments, shipmentTypes = ['lcl', 'fcl', 'coload'])</code>: returns the matching shipment object from the allShipments objects provided. 
+                    <code>shipmentTypes</code> is an optional argument to limit which types are searched through to match HBL numbers. Mostly useless.</p>
+                <p id="getAllLCLHBLs"><code>getAllLCLHBLs(lclShipments)</code>: returns an array of all hbl objects in the given lclShipments object provided</p>
+                <p id="getAllColoadHBLs"><code>getAllColoadHBLs(coloadShipments)</code>: returns an array of all hbl objects in the given coloadShipments object provided</p>
+                <p id="getAllFCLHBLs"><code>getAllFCLHBLs(fclShipments)</code>: returns an array of all hbl objects in the given fclShipments object provided</p>
+                <p id="getAllHBLs"><code>getAllHBLs(allShipments, shipmentTypes = ['lcl', 'fcl', 'coload'])</code>: returns an array of all hbl objects in the given allShipments object provided.
+                    <code>shipmentTypes</code> is an optional argument to limit which types are searched through and appended to the returned hbl array. Potentially useful.</p>
         <div class="divider" style="width:24%; margin:30px 0;"></div>
 
                 <h1 id="usage">Usage:</h1>
@@ -107,6 +125,16 @@
 
     var coloads = NISSINObjects.coloadShipments;
     // Process coloads for something
+                </code></pre>
+
+                <br>
+<p>Using the optional parameters:</p>
+<pre><code class="js language-js">
+    // get all HBLs but limit to lcls and coloads (exclude fcls)
+    NISSINObjects.getAllHBLs(allShipments, ["lcl", "coload"]);
+
+    // get all HBLs, don't limit types
+    NISSINObjects.getAllHBLs(allShipments);
                 </code></pre>
 
 
